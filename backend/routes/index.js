@@ -5,4 +5,8 @@ router.use("/panel-types", require("./panel-types.routes"));
 router.use("/colors", require("./colors.routes"));
 router.use("/manufacturers", require("./manufacturers.routes"));
 
+router.use("/wardrobes", require("./wardrobes.routes"));
+router.use("/glasses", require("./glasses.routes"));
+router.use("/panels", require("./panels.routes"));
+
 module.exports = router;

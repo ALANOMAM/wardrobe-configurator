@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // A manufacturer can have many wardrobes
+      Manufacturer.hasMany(models.Wardrobe, {
+        foreignKey: "manufacturer_id",
+        as: "wardrobes", //alias,optional but might be usefull in certain cases
+      });
     }
   }
   Manufacturer.init(

@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class PanelType extends Model {
     /**
@@ -11,13 +9,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // on panel type can be had by different panel id's in general
+      PanelType.hasMany(models.Panel, {
+        foreignKey: "panel_type_id",
+        as: "panels",
+      });
     }
   }
-  PanelType.init({
-    name: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'PanelType',
-  });
+  PanelType.init(
+    {
+      name: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: "PanelType",
+    }
+  );
   return PanelType;
 };
