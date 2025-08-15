@@ -15,16 +15,18 @@ import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 
 import { PrimeReactProvider } from "primereact/api";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   //   <App />
   // </React.StrictMode>
-
-  <PrimeReactProvider value={{ ripple: true }}>
-    <App />
-  </PrimeReactProvider>
+  <BrowserRouter>
+    <PrimeReactProvider value={{ ripple: true }}>
+      <App />
+    </PrimeReactProvider>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
