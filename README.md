@@ -1,8 +1,32 @@
 # Setting up the project
 
+## 1-Create and fix the env file
+
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=mydb
+MYSQL_USER=user
+MYSQL_PASSWORD=password
+
+DB_HOST=mysql
+DB_USER=user
+DB_PASSWORD=password
+DB_NAME=mydb
+
+## 2-Install the node modules fro frontend and backend folders
+
 ### `docker-compose run --rm npm-frontend npm install`
 
-### `docker-compose up -d frontend --build`
+### `docker-compose run --rm npm-backend npm install`
+
+## 3-Start the three containers
+
+### `docker-compose up -d mysql backend frontend --build`
+
+## 4-Enter in the backend container and run migrate and seed
+
+### `docker exec -it <backend-container-id> sh`
+
+### `npm run refresh-db`
 
 The app runs in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
@@ -10,17 +34,3 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 This project uses [Prime React](https://primereact.org/) and basic css for styling.
 
 ## Description
-
-Here we have the initial 3d piece of a bigger project i am working on, i still have to add backend and database plus some frontend properties to make it full circle.
-
-- For now when you view the project on the browser, you will see a basic wardrobe with its components (left panel, glass, top , right panel ecc) independent from each other.
-- When you click on each component a modal opens with the basic dimensions of the component, you can edit these dimensions, save the edit and see in how the component changes in real time.
-- I realized each component from scratch using blender and imported them because three.js components have a low quality definition.
-
-### `docker-compose run --rm npm-frontend npm install`
-
-### `docker-compose run --rm npm-backend npm install`
-
-### `docker-compose up -d mysql backend frontend --build`
-
-### `npm run refresh-db`
