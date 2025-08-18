@@ -17,4 +17,10 @@ Here we have the initial 3d piece of a bigger project i am working on, i still h
 - When you click on each component a modal opens with the basic dimensions of the component, you can edit these dimensions, save the edit and see in how the component changes in real time.
 - I realized each component from scratch using blender and imported them because three.js components have a low quality definition.
 
-### `docker-compose up -d mysql backend frontend npm-backend --build`
+### `docker-compose run --rm npm-frontend npm install`
+
+### `docker-compose run --rm npm-backend npm install`
+
+### `docker-compose up -d mysql backend frontend --build`
+
+### `npm run refresh-db`
