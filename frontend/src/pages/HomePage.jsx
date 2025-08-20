@@ -4,6 +4,10 @@ import { FloatLabel } from "primereact/floatlabel";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputMask } from "primereact/inputmask";
 
+import { useNavigate } from "react-router-dom"; // 🔹 Import useNavigate
+
+import styles from "../styles/HomePage.module.css";
+
 function HomePage() {
   const [formData, setFormData] = useState({
     production_code: "",
@@ -16,6 +20,8 @@ function HomePage() {
   });
 
   const [manufacturers, setManufacturers] = useState([]);
+
+  const navigate = useNavigate(); // Initialize navigate
 
   //
   useEffect(() => {
@@ -64,6 +70,9 @@ function HomePage() {
         client_phone: "",
         client_email: "",
       });
+
+      //Redirect to /wardrobes
+      navigate("/wardrobes");
     } catch (error) {
       console.error("Submission error:", error);
       alert("Failed to create wardrobe.");
@@ -72,7 +81,7 @@ function HomePage() {
 
   return (
     <div className="flex justify-content-center align-items-center">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={styles.formContainer}>
         <FloatLabel className="mt-4">
           <InputText
             id="production_code"
@@ -93,13 +102,14 @@ function HomePage() {
           <label htmlFor="technician_name">Technician name</label>
         </FloatLabel>
 
-        <div className="field">
-          <label htmlFor="manufacturer_id">Manufacturer</label>
+        <div>
+          {/* <label htmlFor="manufacturer_id">Manufacturer</label> */}
           <select
             id="manufacturer_id"
             name="manufacturer_id"
             value={formData.manufacturer_id}
             onChange={handleChange}
+            className={styles.select}
           >
             <option value="">Select manufacturer</option>
             {manufacturers.map((manu) => (
@@ -131,16 +141,14 @@ function HomePage() {
           <label htmlFor="client_address">Client address</label>
         </FloatLabel>
 
-        <label htmlFor="client_phone" className="font-bold block mb-2 mt-3">
-          Client phone number
-        </label>
         <InputMask
           id="client_phone"
           name="client_phone"
           mask="(999) 999-9999"
           value={formData.client_phone}
           onChange={handleChange}
-          placeholder="(999) 999-9999"
+          placeholder="Client phone number"
+          className="mt-4"
         />
 
         <FloatLabel className="mt-4">

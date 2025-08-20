@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import WardrobesPage from "./pages/WardrobesPage";
 import Page3D from "./pages/Page3D";
+import PdfPage from "./pages/PdfPage";
 
 import { Menubar } from "primereact/menubar";
 
@@ -21,11 +22,17 @@ function App() {
       command: () => navigate("/wardrobes"),
     },
 
-    {
-      label: "3D",
-      icon: "pi pi-box",
-      command: () => navigate("/3d"),
-    },
+    // {
+    //   label: "3D",
+    //   icon: "pi pi-box",
+    //   command: () => navigate("/3d"),
+    // },
+
+    // {
+    //   label: "PDF",
+    //   icon: "pi pi-file-pdf",
+    //   command: () => navigate("/pdf"),
+    // },
   ];
 
   return (
@@ -38,6 +45,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/wardrobes" element={<WardrobesPage />} />
         <Route path="/wardrobes/:id/3d" element={<Page3D />} />
+        <Route path="/wardrobes/:id/pdf" element={<PdfPage />} />
       </Routes>
     </div>
   );

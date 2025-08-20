@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "../styles/WardrobesPage.module.css";
 import { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -32,7 +33,7 @@ function WardrobesPage() {
           className="p-button p-button-sm p-button-success"
           onClick={() => handleEnter(rowData)}
         >
-          Enter
+          Go to 3D
         </button>
         <button className="p-button p-button-sm p-button-info">Edit</button>
         <button className="p-button p-button-sm p-button-danger">Delete</button>
@@ -42,7 +43,7 @@ function WardrobesPage() {
 
   return (
     <div className="card">
-      <h3>Wardrobes</h3>
+      <h3 className={styles.heading}>Wardrobes</h3>
       <DataTable value={products} tableStyle={{ minWidth: "50rem" }}>
         <Column field="id" header="ID" hidden />
         <Column field="production_code" header="Production Code" />
