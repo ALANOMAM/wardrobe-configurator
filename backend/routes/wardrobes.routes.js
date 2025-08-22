@@ -12,8 +12,4 @@ router.delete("/:id", wardrobeController.deleteWardrobe);
 const panelsRouter = require("./panels.routes");
 router.use("/:wardrobeId/panels", panelsRouter);
 
-// Nested glasses routes
-const glassesRouter = require("./glasses.routes");
-router.use("/:wardrobeId/glasses", glassesRouter);
-
 module.exports = router;

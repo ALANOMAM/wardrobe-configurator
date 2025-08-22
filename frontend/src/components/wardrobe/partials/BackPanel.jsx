@@ -60,7 +60,7 @@ function BackPanel({ onClick, positionProp, dimensionsPropInMeters }) {
     //contains important info about my element that will be passed to parent element and
     // hence to the modal
     setPanelInfo({
-      id: "back",
+      id: 5,
       name: "Back Side Panel",
       position: positionProp,
       color: "blue",

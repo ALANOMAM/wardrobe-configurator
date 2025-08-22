@@ -60,7 +60,7 @@ function LeftSidePanel({ onClick, positionProp, dimensionsPropInMeters }) {
     //contains important info about my element that will be passed to parent element and
     // hence to the modal
     setPanelInfo({
-      id: "left",
+      id: 3,
       name: "Left Side Panel",
       position: positionProp,
       color: "blue",

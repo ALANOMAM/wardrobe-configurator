@@ -80,7 +80,8 @@ function HomePage() {
   };
 
   return (
-    <div className="flex justify-content-center align-items-center">
+    <div className="flex flex-column justify-content-center align-items-center">
+      <h3 className={styles.heading}>Create a wardrobe</h3>
       <form onSubmit={handleSubmit} className={styles.formContainer}>
         <FloatLabel className="mt-4">
           <InputText

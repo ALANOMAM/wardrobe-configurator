@@ -61,7 +61,7 @@ function Glass({ onClick, positionProp, dimensionsPropInMeters }) {
     //contains important info about my element that will be passed to parent element and
     // hence to the modal
     setPanelInfo({
-      id: "glass",
+      id: 6,
       name: "Glass element",
       position: positionProp,
       color: "blue",

@@ -17,13 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "RESTRICT",
       });
 
-      //2-A wardrobe has one glass at the time
-      Wardrobe.hasOne(models.Glass, {
-        foreignKey: "wardrobe_id",
-        as: "glass",
-      });
-
-      //3- A wardrobe can have more than one panel at the time
+      //2- A wardrobe can have more than one panel at the time
       Wardrobe.hasMany(models.Panel, {
         foreignKey: "wardrobe_id",
         as: "panels",

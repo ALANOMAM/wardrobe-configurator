@@ -9,12 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      //1-one color can be had my many glasses
-      Color.hasMany(models.Glass, {
-        foreignKey: "color_id",
-        as: "glasses",
-      });
-      //2-one can be had by many panels
+      //1-one can be had by many panels
       Color.hasMany(models.Panel, {
         foreignKey: "color_id",
         as: "panels",

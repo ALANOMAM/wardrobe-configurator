@@ -9,7 +9,6 @@ import { Dialog } from "primereact/dialog";
 import { InputNumber } from "primereact/inputnumber";
 import { FloatLabel } from "primereact/floatlabel";
 import { ColorPicker } from "primereact/colorpicker";
-import { Badge } from "primereact/badge";
 
 import BackPanel from "./partials/BackPanel";
 import Base from "./partials/Base";
@@ -23,8 +22,10 @@ import Origin from "../Origin";
 
 import { useFrame } from "@react-three/fiber";
 
-function WardrobeComponent() {
+function WardrobeComponent({ wardrobeIdProp }) {
+  console.log("wardrobeIdProp", wardrobeIdProp);
   const [visible, setVisible] = useState(false);
+  const [panelTypeId, setPanelTypeId] = useState();
   const [widthValue, setWidthValue] = useState();
   const [heightValue, setHeightValue] = useState();
   const [depthValue, setDepthValue] = useState();
@@ -81,6 +82,7 @@ function WardrobeComponent() {
       setHeightValue(selectedPanel.height);
       setDepthValue(selectedPanel.depth);
       setColorRGB(selectedPanel.color); // assuming it's RGB or a valid color string
+      setPanelTypeId(selectedPanel.id);
     }
   }, [selectedPanel]);
 
@@ -102,30 +104,58 @@ function WardrobeComponent() {
             (depthValue ?? 1000) / 1000,
           ];
 
+          // Save the panel scale to the appropriate state
           switch (selectedPanel?.panelKey) {
-            case "top":
+            case 1:
               setTopPanelScale(newScale);
               break;
-            case "left":
+            case 2:
+              setBaseScale(newScale);
+              break;
+            case 3:
               setLeftPanelScale(newScale);
               break;
-            case "right":
+            case 4:
               setRightPanelScale(newScale);
               break;
-            case "back":
+            case 5:
               setBackPanelScale(newScale);
               break;
-            case "glass":
+            case 6:
               setGlassScale(newScale);
-              break;
-            case "base":
-              setBaseScale(newScale);
               break;
             default:
               break;
           }
+          // Construct the data object to send to the backend
+          const data = {
+            width: widthValue,
+            height: heightValue,
+            depth: depthValue,
+            color: colorRGB,
+            wardrobe_id: wardrobeIdProp,
+            panel_type_id: panelTypeId,
+          };
 
-          setVisible(false);
+          const endpoint = `http://backend:4000/wardrobes/${wardrobeIdProp}/panels`;
+
+          // Make the API request to save the data for panels and glasses
+          fetch(endpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Successfully saved data:", data);
+              setVisible(false); // Close the modal after saving
+            })
+            .catch((error) => {
+              console.error("Error saving data:", error);
+              // Optionally show an error message to the user
+            });
         }}
         autoFocus
       />
@@ -181,16 +211,7 @@ function WardrobeComponent() {
         </Dialog>
       </div>
 
-      <div className="axes">
-        <p>AXES</p>
-        <div>
-          <Badge value="x" severity="success"></Badge>
-          <Badge value="y" severity="info"></Badge>
-          <Badge value="z" severity="danger"></Badge>
-        </div>
-      </div>
-
-      <Canvas shadows camera={{ position: [5, 3, 10], fov: 60 }}>
+      <Canvas shadows camera={{ position: [5, 7, 10], fov: 60 }}>
         {/* illuminate my elemnet from an angle */}
         <pointLight position={[4, 2, 4]} intensity={10} color="white" />;
         {/* illuminate my element from the top, responsible for shadows */}
@@ -210,51 +231,51 @@ function WardrobeComponent() {
         {/* "panelData" is the "panelInfo" taken from each element once clicked.It is an object */}
         <TopPanel
           onClick={(panelData) => {
-            setSelectedPanel({ ...panelData, panelKey: "top" });
+            setSelectedPanel({ ...panelData, panelKey: 1 });
             setVisible(true);
           }}
           positionProp={[3, 4, 0]}
           dimensionsPropInMeters={topPanelScale}
         />
+        <Base
+          onClick={(panelData) => {
+            setSelectedPanel({ ...panelData, panelKey: 2 });
+            setVisible(true);
+          }}
+          positionProp={[3, 0, 0]}
+          dimensionsPropInMeters={baseScale}
+        />
         <LeftSidePanel
           onClick={(panelData) => {
-            setSelectedPanel({ ...panelData, panelKey: "left" });
+            setSelectedPanel({ ...panelData, panelKey: 3 });
             setVisible(true);
           }}
           positionProp={[2, 0, 0]}
           dimensionsPropInMeters={leftPanelScale}
         />
-        <BackPanel
-          onClick={(panelData) => {
-            setSelectedPanel({ ...panelData, panelKey: "back" });
-            setVisible(true);
-          }}
-          positionProp={[3, 0, -1]}
-          dimensionsPropInMeters={backPanelScale}
-        />
         <RightSidePanel
           onClick={(panelData) => {
-            setSelectedPanel({ ...panelData, panelKey: "right" });
+            setSelectedPanel({ ...panelData, panelKey: 4 });
             setVisible(true);
           }}
           positionProp={[4, 0, 0]}
           dimensionsPropInMeters={rightPanelScale}
         />
+        <BackPanel
+          onClick={(panelData) => {
+            setSelectedPanel({ ...panelData, panelKey: 5 });
+            setVisible(true);
+          }}
+          positionProp={[3, 0, -1]}
+          dimensionsPropInMeters={backPanelScale}
+        />
         <Glass
           onClick={(panelData) => {
-            setSelectedPanel({ ...panelData, panelKey: "glass" });
+            setSelectedPanel({ ...panelData, panelKey: 6 });
             setVisible(true);
           }}
           positionProp={[2.5, 0, 2]}
           dimensionsPropInMeters={glassScale}
-        />
-        <Base
-          onClick={(panelData) => {
-            setSelectedPanel({ ...panelData, panelKey: "base" });
-            setVisible(true);
-          }}
-          positionProp={[3, 0, 0]}
-          dimensionsPropInMeters={baseScale}
         />
         <Ground />
         <OrbitControls target={[4, 0, 0]} />

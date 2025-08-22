@@ -60,7 +60,7 @@ function TopPanel({ onClick, positionProp, dimensionsPropInMeters }) {
     //contains important info about my element that will be passed to parent element and
     // hence to the modal
     setPanelInfo({
-      id: "top",
+      id: 1,
       name: "Top Panel",
       position: positionProp,
       color: "blue",

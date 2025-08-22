@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import "../App.css";
+
+import "primeicons/primeicons.css";
+
 import styles from "../styles/Page3D.module.css";
+import { Badge } from "primereact/badge";
 import WardrobeComponent from "../components/wardrobe/WardrobeComponent";
 
 function Page3D() {
@@ -38,15 +41,39 @@ function Page3D() {
             <p>Loading wardrobe details...</p> // Show loading state
           ) : (
             <>
-              <p>Production code: {wardrobe.production_code}</p>
-              <p>Client name: {wardrobe.client_name}</p>
-              <p>Manufacturer: {wardrobe.manufacturer_id}</p>
-              <button onClick={() => handlePdf(id)}>Go to PDF</button>
+              <span>
+                <strong>Production code: </strong>
+                {wardrobe.production_code}
+              </span>
+              <span>
+                <strong>Client name: </strong>
+                {wardrobe.client_name}
+              </span>
+              <span>
+                <strong>Manufacturer: </strong>
+                {wardrobe.manufacturer_id}
+              </span>
+              <button
+                className="p-button p-component p-button-success"
+                onClick={() => handlePdf(id)}
+              >
+                Go to PDF
+                <i className="pi pi-file-pdf"></i>
+              </button>
             </>
           )}
         </div>
       </div>
-      <WardrobeComponent />
+
+      <div className={styles.axes}>
+        <p>AXES</p>
+        <div>
+          <Badge value="x" severity="success"></Badge>
+          <Badge value="y" severity="info"></Badge>
+          <Badge value="z" severity="danger"></Badge>
+        </div>
+      </div>
+      <WardrobeComponent wardrobeIdProp={id} />
     </>
   );
 }
