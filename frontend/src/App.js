@@ -42,7 +42,10 @@ function App() {
 
       {/* Route definitions */}
       <Routes>
+        {/* where i create my wardrobe from scratch */}
         <Route path="/" element={<HomePage />} />
+        {/* it comes back to the home page form for editing the wardrobe */}
+        <Route path="/wardrobes/:id/edit" element={<HomePage />} />
         <Route path="/wardrobes" element={<WardrobesPage />} />
         <Route path="/wardrobes/:id/3d" element={<Page3D />} />
         <Route path="/wardrobes/:id/pdf" element={<PdfPage />} />

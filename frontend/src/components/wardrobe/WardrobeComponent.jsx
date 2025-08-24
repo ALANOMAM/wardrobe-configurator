@@ -40,51 +40,224 @@ function WardrobeComponent({ wardrobeIdProp }) {
   const [backPanelScale, setBackPanelScale] = useState();
   const [glassScale, setGlassScale] = useState();
   const [baseScale, setBaseScale] = useState();
-  //
+
+  //creates an array of panels fetched fron backend,
+  const [wardrobePanels, setWardrobePanels] = useState([]);
+
   useEffect(() => {
-    fetch("http://backend:4000/panel-types")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("panel types ", data);
-        // setPanelTypes(data);
-      })
-      .catch((err) => console.error("Error:", err));
-  }, []);
+    if (wardrobeIdProp) {
+      fetch(`http://backend:4000/wardrobes/${wardrobeIdProp}/panels`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("Fetched wardrobe panels", data);
+          setWardrobePanels(data);
+
+          //MAP EACH PANEL TO ITS COMPONENT BASED ON PANEL TYPE ID  START
+          //select from the panels array belonging to a specific wardrobe and assign the
+          // measures to each panel based on the panel type, this helps for visual representation
+          // map panel_type_id => scale
+          data.forEach((panel) => {
+            const scale = [
+              (panel.width ?? 1000) / 1000,
+              (panel.height ?? 1000) / 1000,
+              (panel.depth ?? 1000) / 1000,
+            ];
+
+            switch (panel.panel_type_id) {
+              case 1:
+                setTopPanelScale(scale);
+                break;
+              case 2:
+                setBaseScale(scale);
+                break;
+              case 3:
+                setLeftPanelScale(scale);
+                break;
+              case 4:
+                setRightPanelScale(scale);
+                break;
+              case 5:
+                setBackPanelScale(scale);
+                break;
+              case 6:
+                setGlassScale(scale);
+                break;
+              default:
+                break;
+            }
+          });
+
+          //MAP EACH PANEL TO ITS COMPONENT BASED ON PANEL TYPE ID  END
+        })
+        .catch((err) => console.error("Error fetching panels:", err));
+    }
+  }, [wardrobeIdProp]);
   //
 
-  //
-  useEffect(() => {
-    fetch("http://backend:4000/colors")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("colors ", data);
-        // setPanelTypes(data);
-      })
-      .catch((err) => console.error("Error:", err));
-  }, []);
-  //
+  // //
+  // useEffect(() => {
+  //   fetch("http://backend:4000/panel-types")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log("panel types ", data);
+  //       // setPanelTypes(data);
+  //     })
+  //     .catch((err) => console.error("Error:", err));
+  // }, []);
+  // //
 
-  //
-  useEffect(() => {
-    fetch("http://backend:4000/manufacturers")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("manufacturers ", data);
-        // setPanelTypes(data);
-      })
-      .catch((err) => console.error("Error:", err));
-  }, []);
-  //
+  // //
+  // useEffect(() => {
+  //   fetch("http://backend:4000/colors")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log("colors ", data);
+  //       // setPanelTypes(data);
+  //     })
+  //     .catch((err) => console.error("Error:", err));
+  // }, []);
+  // //
+
+  // //
+  // useEffect(() => {
+  //   fetch("http://backend:4000/manufacturers")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log("manufacturers ", data);
+  //       // setPanelTypes(data);
+  //     })
+  //     .catch((err) => console.error("Error:", err));
+  // }, []);
+  // //
 
   useEffect(() => {
     if (selectedPanel) {
       setWidthValue(selectedPanel.width);
       setHeightValue(selectedPanel.height);
       setDepthValue(selectedPanel.depth);
-      setColorRGB(selectedPanel.color); // assuming it's RGB or a valid color string
+      setColorRGB(selectedPanel.color);
       setPanelTypeId(selectedPanel.id);
     }
   }, [selectedPanel]);
+
+  const handleSave = () => {
+    {
+      const newScale = [
+        (widthValue ?? 1000) / 1000,
+        (heightValue ?? 1000) / 1000,
+        (depthValue ?? 1000) / 1000,
+      ];
+
+      // Save the panel scale to the appropriate state
+      switch (selectedPanel?.panelKey) {
+        case 1:
+          setTopPanelScale(newScale);
+          break;
+        case 2:
+          setBaseScale(newScale);
+          break;
+        case 3:
+          setLeftPanelScale(newScale);
+          break;
+        case 4:
+          setRightPanelScale(newScale);
+          break;
+        case 5:
+          setBackPanelScale(newScale);
+          break;
+        case 6:
+          setGlassScale(newScale);
+          break;
+        default:
+          break;
+      }
+
+      // Detect if this panel already exists
+      const existingPanel = wardrobePanels.find(
+        (p) => p.panel_type_id === panelTypeId
+      );
+      // If it exist the modal is in update mode, otherwise in create mode
+      const method = existingPanel ? "PUT" : "POST";
+      const url = existingPanel
+        ? `http://backend:4000/wardrobes/${wardrobeIdProp}/panels/${existingPanel.id}`
+        : `http://backend:4000/wardrobes/${wardrobeIdProp}/panels`;
+
+      // Construct the data object to send to the backend
+      const data = {
+        width: widthValue,
+        height: heightValue,
+        depth: depthValue,
+        color: colorRGB,
+        wardrobe_id: wardrobeIdProp,
+        panel_type_id: panelTypeId,
+      };
+
+      // Make the API request to save the data for panels
+      fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then(() => {
+          console.log(
+            `Successfully ${method === "POST" ? "created" : "updated"} panel`
+          );
+          setVisible(false); // Close the modal after saving
+          setSelectedPanel(null);
+          setWidthValue(null);
+          setHeightValue(null);
+          setDepthValue(null);
+          setColorRGB(null);
+
+          // Refresh the wardrobePanels to get updated panel data
+          return fetch(
+            `http://backend:4000/wardrobes/${wardrobeIdProp}/panels`
+          );
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          setWardrobePanels(data);
+
+          data.forEach((panel) => {
+            const scale = [
+              (panel.width ?? 1000) / 1000,
+              (panel.height ?? 1000) / 1000,
+              (panel.depth ?? 1000) / 1000,
+            ];
+
+            switch (panel.panel_type_id) {
+              case 1:
+                setTopPanelScale(scale);
+                break;
+              case 2:
+                setBaseScale(scale);
+                break;
+              case 3:
+                setLeftPanelScale(scale);
+                break;
+              case 4:
+                setRightPanelScale(scale);
+                break;
+              case 5:
+                setBackPanelScale(scale);
+                break;
+              case 6:
+                setGlassScale(scale);
+                break;
+              default:
+                break;
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Error saving data:", error);
+          // Optionally show an error message to the user
+        });
+    }
+  };
 
   const footerContent = (
     <div>
@@ -97,66 +270,7 @@ function WardrobeComponent({ wardrobeIdProp }) {
       <Button
         label="Save"
         icon="pi pi-check"
-        onClick={() => {
-          const newScale = [
-            (widthValue ?? 1000) / 1000,
-            (heightValue ?? 1000) / 1000,
-            (depthValue ?? 1000) / 1000,
-          ];
-
-          // Save the panel scale to the appropriate state
-          switch (selectedPanel?.panelKey) {
-            case 1:
-              setTopPanelScale(newScale);
-              break;
-            case 2:
-              setBaseScale(newScale);
-              break;
-            case 3:
-              setLeftPanelScale(newScale);
-              break;
-            case 4:
-              setRightPanelScale(newScale);
-              break;
-            case 5:
-              setBackPanelScale(newScale);
-              break;
-            case 6:
-              setGlassScale(newScale);
-              break;
-            default:
-              break;
-          }
-          // Construct the data object to send to the backend
-          const data = {
-            width: widthValue,
-            height: heightValue,
-            depth: depthValue,
-            color: colorRGB,
-            wardrobe_id: wardrobeIdProp,
-            panel_type_id: panelTypeId,
-          };
-
-          const endpoint = `http://backend:4000/wardrobes/${wardrobeIdProp}/panels`;
-
-          // Make the API request to save the data for panels and glasses
-          fetch(endpoint, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("Successfully saved data:", data);
-              setVisible(false); // Close the modal after saving
-            })
-            .catch((error) => {
-              console.error("Error saving data:", error);
-              // Optionally show an error message to the user
-            });
-        }}
+        onClick={() => handleSave()}
         autoFocus
       />
     </div>

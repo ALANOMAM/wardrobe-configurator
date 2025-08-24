@@ -5,7 +5,7 @@ function PdfPage() {
   // this line only fetches the dinamic part of the url
   const { id } = useParams();
 
-  return <h1>pdf page for wardrobe {id}</h1>;
+  return <h1>pdf page for wardrobe {id} NOT YET AVAILABLE</h1>;
 }
 
 export default PdfPage;

@@ -4,7 +4,8 @@ import { FloatLabel } from "primereact/floatlabel";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputMask } from "primereact/inputmask";
 
-import { useNavigate } from "react-router-dom"; // 🔹 Import useNavigate
+import { useNavigate } from "react-router-dom"; //Import useNavigate
+import { useParams } from "react-router-dom";
 
 import styles from "../styles/HomePage.module.css";
 
@@ -21,7 +22,23 @@ function HomePage() {
 
   const [manufacturers, setManufacturers] = useState([]);
 
+  const { id } = useParams(); // <-- Get wardrobe ID from route if exists
+  const isEditMode = Boolean(id); // If the ID exists it means i am in edit mode, so the form and data submission will adjust
   const navigate = useNavigate(); // Initialize navigate
+
+  //
+  useEffect(() => {
+    if (isEditMode) {
+      fetch(`http://backend:4000/wardrobes/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setFormData(data);
+        })
+        .catch((err) => console.error("Error:", err));
+    }
+  }, [id]);
+
+  //
 
   //
   useEffect(() => {
@@ -46,9 +63,16 @@ function HomePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const url = isEditMode
+      ? `http://backend:4000/wardrobes/${id}`
+      : "http://backend:4000/wardrobes";
+
+    const method = isEditMode ? "PUT" : "POST";
+
     try {
-      const response = await fetch("http://backend:4000/wardrobes", {
-        method: "POST",
+      const response = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -57,10 +81,10 @@ function HomePage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create wardrobe.");
+        throw new Error(errorData.message || "Failed to save wardrobe.");
       }
 
-      alert("Wardrobe created successfully!");
+      alert(`Wardrobe ${isEditMode ? "updated" : "created"} successfully!`);
       setFormData({
         production_code: "",
         technician_name: "",
@@ -70,12 +94,11 @@ function HomePage() {
         client_phone: "",
         client_email: "",
       });
-
       //Redirect to /wardrobes
       navigate("/wardrobes");
     } catch (error) {
       console.error("Submission error:", error);
-      alert("Failed to create wardrobe.");
+      alert("Failed to save wardrobe.");
     }
   };
 
