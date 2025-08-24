@@ -9,9 +9,9 @@ The project is a very simple wardrobe elements configurator with a 3d page that 
 
 ## Technologies
 
-- This is a dockerized fullstack project with react on frontend, express-sequelize-mysql on backend.
-- The elements were created by me from scratch using blender.
-- I used css and prime react library for styling.
+- This is a DOCKERIZED fullstack project with REACT on frontend, EXPRESS-SEQUELIZE-MYSQL on backend.
+- The elements were created by me from scratch using BLENDER, in combination with the THREE.JS library, i was able to create a simple and interractive 3d page.
+- I used CSS and PRIMEREACT library for styling.
 
 # Setting up the project
 
