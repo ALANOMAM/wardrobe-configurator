@@ -1,3 +1,18 @@
+## Description
+
+The project is a very simple wardrobe elements configurator with a 3d page that helps you see the elements and modify them. The project contains:
+
+- A homepage with a form where you can create a wardrobe project from scratch.
+- A wardrobes page where you can see the list of all the wardrobe projects you have created. In that page you can update, delete and have access to a 3d represetation of the elements in your wardrobe project.
+- A 3d page where you can see the elements of a specific wordrobe project. By clicking on each element, a modal appears and gives you the ability to modify the dimensions of the wardrobe elements .
+- There will be the possibility to create a final pdf of your wardrobe containing the dimensions of your elements, the clients data, manufacturers data and the nae o the one who devloped the wadrobe.
+
+## Technologies
+
+- This is a dockerized fullstack project with react on frontend, express-sequelize-mysql on backend.
+- The elements were created by me from scratch using blender.
+- I used css and prime react library for styling.
+
 # Setting up the project
 
 ## 1-Create and fix the env file
@@ -32,5 +47,3 @@ The app runs in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 This project uses [Prime React](https://primereact.org/) and basic css for styling.
-
-## Description

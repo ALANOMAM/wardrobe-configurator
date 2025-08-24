@@ -6,10 +6,10 @@ import { Column } from "primereact/column";
 import { useNavigate } from "react-router-dom";
 
 function WardrobesPage() {
-  const [products, setProducts] = useState([]);
   const navigate = useNavigate();
 
   //
+  const [products, setProducts] = useState([]);
   useEffect(() => {
     fetch("http://backend:4000/wardrobes")
       .then((res) => res.json())
@@ -19,6 +19,16 @@ function WardrobesPage() {
       })
       .catch((err) => console.error("Error:", err));
   }, []);
+  //
+
+  //
+  const [manufacturers, setManufacturers] = useState([]);
+  useEffect(() => {
+    fetch(`http://backend:4000/manufacturers`)
+      .then((res) => res.json())
+      .then((data) => setManufacturers(data));
+  }, []);
+
   //
 
   const handleGoTo3d = (rowData) => {
@@ -97,7 +107,15 @@ function WardrobesPage() {
           <Column field="client_email" header="Client Email" />
           <Column field="client_phone" header="Client Phone" />
           <Column field="client_address" header="Client Address" />
-          <Column field="manufacturer_id" header="Manufacturer" />
+          <Column
+            header="Manufacturer"
+            body={(rowData) => {
+              const manufacturer = manufacturers.find(
+                (m) => m.id === rowData.manufacturer_id
+              );
+              return manufacturer ? manufacturer.name : "Unknown";
+            }}
+          />
           <Column
             header="Actions"
             body={actionBodyTemplate}

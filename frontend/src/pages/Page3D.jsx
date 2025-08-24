@@ -17,13 +17,20 @@ function Page3D() {
   const navigate = useNavigate();
 
   const [wardrobe, setWardrobe] = useState();
-  console.log("WARDROBE", wardrobe);
+  const [manufacturers, setManufacturers] = useState([]);
+  console.log("MANUFACTURERS", manufacturers);
 
   useEffect(() => {
     fetch(`http://backend:4000/wardrobes/${id}`)
       .then((res) => res.json())
       .then((data) => setWardrobe(data));
   }, [id]);
+
+  useEffect(() => {
+    fetch(`http://backend:4000/manufacturers`)
+      .then((res) => res.json())
+      .then((data) => setManufacturers(data));
+  }, []);
 
   const handlePdf = (id) => {
     console.log("Navigating to PDF view for:", id);
@@ -51,7 +58,8 @@ function Page3D() {
               </span>
               <span>
                 <strong>Manufacturer: </strong>
-                {wardrobe.manufacturer_id}
+                {manufacturers.find((m) => m.id === wardrobe.manufacturer_id)
+                  ?.name || "Unknown"}
               </span>
               <button
                 className="p-button p-component p-button-success"
